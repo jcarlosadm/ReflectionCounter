@@ -4,3 +4,7 @@
 .classpath
 .project
 /.settings/
+
+/outputs/
+general.test.config
+*.json

@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -124,6 +125,10 @@ public class App {
 		}
 
 		jarFile.close();
+	}
+	
+	public List<Callee> getCalleeList() {
+		return this.callees;
 	}
 
 	public static void main(String[] args) {

@@ -6,7 +6,8 @@ import java.util.Properties;
 public class PropertiesManager {
 
 	private static Properties properties;
-	private static String path = "general.config";
+	// TODO change to general.config later
+	private static String path = "general.test.config";
 
 	public static String getProperty(String propertie) {
 		try {
