@@ -7,10 +7,6 @@ import com.reflectCounter.util.request.GetResponse;
 import com.reflectCounter.util.request.RequestTimer;
 
 public class GithubSearchApi {
-	/*
-	 * TODO remove later uses GetReponse to get jsonString verify limit of 30
-	 * requests per minute
-	 */
 
 	private static final int REQUEST_PERIOD_IN_MILLIS = 60000;
 	private static final int AUTH_REQUESTS_PER_MINUTE = 30;

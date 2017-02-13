@@ -3,6 +3,8 @@ package com.reflectCounter.github.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.LimitExceededException;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -37,14 +39,17 @@ public class FileFinder {
 	private void buildUrl() {
 		StringBuilder url = new StringBuilder(URL_PREFIX);
 
-		url.append("'" + this.searchTerm + "'");
-		url.append("+language:" + this.language);
+		url.append(this.searchTerm.replaceAll(" ", "%20"));
+		
+		if (this.language != null && !this.language.isEmpty())
+			url.append("+language:" + this.language);
+		
 		url.append("+in:file+repo:" + this.username + "/" + this.reponame);
-
+		
 		this.url = url.toString();
 	}
 
-	public List<String> run() throws GithubSearchLimitResultsException, Exception {
+	public List<String> run() throws LimitExceededException, Exception {
 		List<String> list = new ArrayList<>();
 		int page = 1;
 
@@ -53,7 +58,7 @@ public class FileFinder {
 
 		int total = this.getNumberOfFiles(json);
 		if (total > 1000)
-			throw new GithubSearchLimitResultsException("Over 1000 results in this search.");
+			throw new LimitExceededException("Over 1000 results in this search.");
 
 		int remains = total;
 		while (remains > 0) {
