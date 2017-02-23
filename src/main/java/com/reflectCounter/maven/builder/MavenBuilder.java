@@ -1,4 +1,4 @@
-package com.reflectCounter.util.repositoryBuilder;
+package com.reflectCounter.maven.builder;
 
 import java.io.File;
 import java.util.Collections;
@@ -8,6 +8,8 @@ import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+
+import com.reflectCounter.util.repositoryBuilder.RepoBuilder;
 
 public class MavenBuilder extends RepoBuilder {
 

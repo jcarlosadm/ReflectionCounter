@@ -1,6 +1,8 @@
-package com.reflectCounter.util.repositoryBuilder;
+package com.reflectCounter.gradle.builder;
 
 import java.io.File;
+
+import com.reflectCounter.util.repositoryBuilder.RepoBuilder;
 
 public class GradleBuilder extends RepoBuilder {
 
