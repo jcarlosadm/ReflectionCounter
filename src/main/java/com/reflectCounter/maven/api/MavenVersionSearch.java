@@ -9,6 +9,10 @@ public class MavenVersionSearch {
 	}
 	
 	public static String getVersion(String group, String artifact) throws Exception {
+		if (group == null || group.isEmpty() || artifact == null || artifact.isEmpty()) {
+			return null;
+		}
+		
 		JSONObject jsonObject = MavenVersionJSON.getJson(group, artifact);
 		if (jsonObject == null)
 			return null;
