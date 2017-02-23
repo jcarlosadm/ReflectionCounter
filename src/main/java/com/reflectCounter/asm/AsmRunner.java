@@ -1,4 +1,4 @@
-package com.reflectCounter;
+package com.reflectCounter.asm;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -16,13 +16,15 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.EmptyVisitor;
 import org.objectweb.asm.commons.Method;
 
-public class App {
+public class AsmRunner {
 	private String targetClass;
 	private Method targetMethod;
 
 	private AppClassVisitor cv;
 
 	private ArrayList<Callee> callees = new ArrayList<Callee>();
+	private String targetMethodDeclaration;
+	private String jarPath;
 
 	private static class Callee {
 		String className;
@@ -100,15 +102,14 @@ public class App {
 		}
 	}
 
-	public void findCallingMethodsInJar(String jarPath, String targetClass, String targetMethodDeclaration)
+	public void findCallingMethodsInJar()
 			throws Exception {
 
-		this.targetClass = targetClass;
 		this.targetMethod = Method.getMethod(targetMethodDeclaration);
 
 		this.cv = new AppClassVisitor();
 
-		JarFile jarFile = new JarFile(jarPath);
+		JarFile jarFile = new JarFile(this.jarPath);
 		Enumeration<JarEntry> entries = jarFile.entries();
 
 		while (entries.hasMoreElements()) {
@@ -130,12 +131,18 @@ public class App {
 	public List<Callee> getCalleeList() {
 		return this.callees;
 	}
+	
+	public AsmRunner(String jarPath, String targetClass, String targetMethodDeclaration) {
+		this.jarPath = jarPath;
+		this.targetClass = targetClass;
+		this.targetMethodDeclaration = targetMethodDeclaration;
+	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
-			App app = new App();
+			AsmRunner app = new AsmRunner(args[0], args[1], args[2]);
 
-			app.findCallingMethodsInJar(args[0], args[1], args[2]);
+			app.findCallingMethodsInJar();
 
 			for (Callee c : app.callees) {
 				System.out
@@ -147,6 +154,6 @@ public class App {
 		} catch (Exception x) {
 			x.printStackTrace();
 		}
-	}
+	}*/
 
 }

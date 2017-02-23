@@ -3,6 +3,7 @@ package com.reflectCounter;
 import java.io.File;
 import java.util.List;
 
+import com.reflectCounter.asm.AsmRunner;
 import com.reflectCounter.exploreLocalRepo.ExplorerLocalRepository;
 import com.reflectCounter.exploreLocalRepo.ExplorerMode;
 import com.reflectCounter.github.api.FileFinder;
@@ -36,7 +37,9 @@ public class ProjectRunner {
 			String jarPath = mavenProject.downloadJar();
 			if (jarPath != null && !jarPath.isEmpty()) {
 				// TODO run App with jar and exits
+				// TODO create enum to methods to explore
 				System.out.println("run App in jar");
+				//AsmRunner asmRunner = new AsmRunner(jarPath, targetClass, targetMethodDeclaration)
 				return;
 			}
 		}
@@ -77,7 +80,7 @@ public class ProjectRunner {
 
 		File jarFile = repoBuilder.getJar();
 
-		App app = new App();
+		//AsmRunner app = new AsmRunner();
 
 		/*
 		 * TODO call app over methods of classes of reflection api, and over
