@@ -1,25 +1,26 @@
 package com.reflectCounter.maven.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.lang.reflect.Field;
 
 import org.junit.Test;
 
-import com.reflectCounter.maven.api.MavenProject;
-
 public class MavenProjectTest {
 
-	private static final String GROUP = "log4j";
-	private static final String ARTIFACT = "log4j";
-	private static final String WRONG_GROUP = "aaaaaa";
-	private static final String WRONG_ARTIFACT = "bbbbbb";
+	private static final String CORRECT_POM = "src/test/resources/correct_pom.xml";
+	private static final String WRONG_POM_1 = "src/test/resources/wrong_pom.xml";
+	private static final String WRONG_POM_2 = "src/test/resources/wrong_pom2.xml";
+	private static final String WRONG_POM_3 = "src/test/resources/wrong_pom3.xml";
 	
 	private MavenProject mavenProject;
 	
-	private String getVersionObject(String group, String artifact) throws Exception {
-		this.mavenProject = new MavenProject(group, artifact);
+	private String getVersionObject(String pathname) throws Exception {
+		this.mavenProject = new MavenProject(new File(pathname));
 		
 		Field field = MavenProject.class.getDeclaredField("version");
 		field.setAccessible(true);
@@ -28,24 +29,24 @@ public class MavenProjectTest {
 	
 	@Test
 	public void testConstructor() throws Exception {
-		String version = this.getVersionObject(GROUP, ARTIFACT);
+		String version = this.getVersionObject(CORRECT_POM);
 		assertNotNull(version);
 		assertFalse(version.isEmpty());
 	}
 	
 	@Test
 	public void testContructorWrongParameters() throws Exception {
-		String version = this.getVersionObject(WRONG_GROUP, ARTIFACT);
+		String version = this.getVersionObject(WRONG_POM_1);
 		assertNull(version);
-		version = this.getVersionObject(GROUP, WRONG_ARTIFACT);
+		version = this.getVersionObject(WRONG_POM_2);
 		assertNull(version);
-		version = this.getVersionObject(WRONG_GROUP, WRONG_ARTIFACT);
+		version = this.getVersionObject(WRONG_POM_3);
 		assertNull(version);
 	}
 
 	@Test
 	public void testDownloadJar() throws Exception {
-		this.mavenProject = new MavenProject(GROUP, ARTIFACT);
+		this.mavenProject = new MavenProject(new File(CORRECT_POM));
 		String path = this.mavenProject.downloadJar();
 		
 		assertNotNull(path);
@@ -59,15 +60,15 @@ public class MavenProjectTest {
 	
 	@Test
 	public void testDownloadJarWrongParameters() throws Exception {
-		this.mavenProject = new MavenProject(WRONG_GROUP, WRONG_ARTIFACT);
+		this.mavenProject = new MavenProject(new File(WRONG_POM_1));
 		String path = this.mavenProject.downloadJar();
 		assertNull(path);
 		
-		this.mavenProject = new MavenProject(GROUP, WRONG_ARTIFACT);
+		this.mavenProject = new MavenProject(new File(WRONG_POM_2));
 		path = this.mavenProject.downloadJar();
 		assertNull(path);
 		
-		this.mavenProject = new MavenProject(WRONG_GROUP, ARTIFACT);
+		this.mavenProject = new MavenProject(new File(WRONG_POM_3));
 		path = this.mavenProject.downloadJar();
 		assertNull(path);
 	}
