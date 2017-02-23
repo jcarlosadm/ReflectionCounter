@@ -7,6 +7,7 @@ import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 
+import com.reflectCounter.maven.explorer.MavenExplorer;
 import com.reflectCounter.util.Folders;
 
 public class MavenProject {
@@ -17,9 +18,11 @@ public class MavenProject {
 	private String artifact = "";
 	private String version = null;
 
-	public MavenProject(String group, String artifact) {
-		this.group = group;
-		this.artifact = artifact;
+	public MavenProject(File pom) {
+		MavenExplorer mavenExplorer = new MavenExplorer(pom);
+		
+		this.group = mavenExplorer.getGroup();
+		this.artifact = mavenExplorer.getArtifact();
 		this.getVersion();
 	}
 
@@ -30,7 +33,7 @@ public class MavenProject {
 	 */
 	public String downloadJar() {
 		if (this.version == null || this.version.isEmpty()) {
-			System.out.println("error to get jar");
+			System.out.println("error to get jar. version is null or empty");
 			return null;
 		}
 		
