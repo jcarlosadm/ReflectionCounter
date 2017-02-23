@@ -1,4 +1,4 @@
-package test.java.com.reflectCounter.util;
+package com.reflectCounter.util;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

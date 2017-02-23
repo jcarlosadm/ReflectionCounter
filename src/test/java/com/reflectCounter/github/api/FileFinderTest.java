@@ -1,4 +1,4 @@
-package test.java.com.reflectCounter.github.api;
+package com.reflectCounter.github.api;
 
 import java.util.List;
 

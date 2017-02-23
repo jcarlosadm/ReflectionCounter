@@ -1,4 +1,4 @@
-package test.java.com.reflectCounter.maven.api;
+package com.reflectCounter.maven.api;
 
 import static org.junit.Assert.*;
 
