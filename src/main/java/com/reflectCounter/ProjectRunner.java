@@ -7,10 +7,11 @@ import com.reflectCounter.exploreLocalRepo.ExplorerLocalRepository;
 import com.reflectCounter.exploreLocalRepo.ExplorerMode;
 import com.reflectCounter.github.api.FileFinder;
 import com.reflectCounter.github.api.SearchTerms;
+import com.reflectCounter.gradle.builder.GradleBuilder;
+import com.reflectCounter.maven.api.MavenProject;
+import com.reflectCounter.maven.builder.MavenBuilder;
 import com.reflectCounter.util.CSVBuilder;
 import com.reflectCounter.util.Repository;
-import com.reflectCounter.util.repositoryBuilder.GradleBuilder;
-import com.reflectCounter.util.repositoryBuilder.MavenBuilder;
 import com.reflectCounter.util.repositoryBuilder.RepoBuilder;
 
 public class ProjectRunner {
@@ -29,7 +30,17 @@ public class ProjectRunner {
 	}
 
 	public void run() throws Exception {
-		// TODO Auto-generated method stub
+		// TODO search artifacts if is maven project
+		if (this.repository.isMavenProject()) {
+			MavenProject mavenProject = new MavenProject(this.getPomFile());
+			String jarPath = mavenProject.downloadJar();
+			if (jarPath != null && !jarPath.isEmpty()) {
+				// TODO run App with jar and exits
+				System.out.println("run App in jar");
+				return;
+			}
+		}
+
 		SearchTerms searchTerms = this.fillBasicSearchTerms();
 
 		List<String> listReflectFiles = null;
@@ -46,11 +57,9 @@ public class ProjectRunner {
 
 		ExplorerLocalRepository expLocalRepo = new ExplorerLocalRepository(
 				new File(this.repository.getRepoFolderName()), this.csvBuilder);
-		
+
 		List<String> suspiciousReflectList = expLocalRepo.explore(listReflectFiles, ExplorerMode.REFLECTION);
 		List<String> suspiciousUnsafeList = expLocalRepo.explore(listUnsafeFiles, ExplorerMode.UNSAFE);
-		
-		
 
 		// TODO maybe remove
 		RepoBuilder repoBuilder = null;
@@ -75,6 +84,10 @@ public class ProjectRunner {
 		 * methods of Unsafe class write frequency of the method in csv file
 		 */
 		// app.findCallingMethodsInJar(jarPath, targetClass, targetMethod);
+	}
+
+	private File getPomFile() {
+		return new File(this.repository.getRepoFolderName() + File.separator + "pom.xml");
 	}
 
 	private SearchTerms fillBasicSearchTerms() {
