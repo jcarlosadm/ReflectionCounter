@@ -2,6 +2,7 @@ package com.reflectCounter.asm;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -15,6 +16,9 @@ import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.EmptyVisitor;
 import org.objectweb.asm.commons.Method;
+
+import com.reflectCounter.exploreLocalRepo.ExplorerMode;
+import com.reflectCounter.util.CSVBuilder;
 
 public class AsmRunner {
 	private String targetClass;
@@ -102,7 +106,7 @@ public class AsmRunner {
 		}
 	}
 
-	public void findCallingMethodsInJar()
+	private void findCallingMethodsInJar()
 			throws Exception {
 
 		this.targetMethod = Method.getMethod(targetMethodDeclaration);
@@ -128,14 +132,38 @@ public class AsmRunner {
 		jarFile.close();
 	}
 	
-	public List<Callee> getCalleeList() {
+	private List<Callee> getCalleeList() {
 		return this.callees;
 	}
 	
-	public AsmRunner(String jarPath, String targetClass, String targetMethodDeclaration) {
+	private AsmRunner(String jarPath, String targetClass, String targetMethodDeclaration) {
 		this.jarPath = jarPath;
 		this.targetClass = targetClass;
 		this.targetMethodDeclaration = targetMethodDeclaration;
+	}
+	
+	public void run(String jarPath, CSVBuilder csvBuilder) {
+		// TODO implement
+		
+	}
+	
+	public static void main(String[] args) throws SecurityException, ClassNotFoundException {
+		String className = ExplorerMode.UNSAFE.getListOfClassNames().get(0);
+		java.lang.reflect.Method[] methods = Class.forName(className).getMethods();
+		
+		System.out.println("class: "+ExplorerMode.UNSAFE.getListOfClassNames().get(0)+"\n");
+		for (java.lang.reflect.Method method : methods) {
+			/*System.out.print(method.getReturnType().toString() + " " + method.getName() + "(");
+			boolean first = true;
+			for (Type type : method.getParameterTypes()) {
+				if(first){ first = false; }
+				else { System.out.print(", "); }
+				System.out.print(type.toString());
+			}
+			System.out.println(")");*/
+			System.out.println(method);
+		}
+		System.out.println("--------------------------");
 	}
 
 	/*public static void main(String[] args) {
