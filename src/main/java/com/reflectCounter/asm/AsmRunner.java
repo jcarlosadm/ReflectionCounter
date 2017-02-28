@@ -2,7 +2,6 @@ package com.reflectCounter.asm;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -20,6 +19,11 @@ import org.objectweb.asm.commons.Method;
 import com.reflectCounter.exploreLocalRepo.ExplorerMode;
 import com.reflectCounter.util.CSVBuilder;
 
+/**
+ * AsmRunner See App class in
+ * http://stackoverflow.com/questions/930289/how-can-i-find-all-the-methods-that-call-a-given-method-in-java
+ * get occurrences of methods in jar file
+ */
 public class AsmRunner {
 	private String targetClass;
 	private Method targetMethod;
@@ -29,7 +33,9 @@ public class AsmRunner {
 	private ArrayList<Callee> callees = new ArrayList<Callee>();
 	private String targetMethodDeclaration;
 	private String jarPath;
+	private CSVBuilder csvBuilder;
 
+	@SuppressWarnings("unused")
 	private static class Callee {
 		String className;
 		String methodName;
@@ -106,8 +112,7 @@ public class AsmRunner {
 		}
 	}
 
-	private void findCallingMethodsInJar()
-			throws Exception {
+	private void findCallingMethodsInJar() throws Exception {
 
 		this.targetMethod = Method.getMethod(targetMethodDeclaration);
 
@@ -131,57 +136,43 @@ public class AsmRunner {
 
 		jarFile.close();
 	}
-	
-	private List<Callee> getCalleeList() {
-		return this.callees;
-	}
-	
-	private AsmRunner(String jarPath, String targetClass, String targetMethodDeclaration) {
+
+	public AsmRunner(String jarPath, CSVBuilder csvBuilder) {
 		this.jarPath = jarPath;
-		this.targetClass = targetClass;
-		this.targetMethodDeclaration = targetMethodDeclaration;
+		this.csvBuilder = csvBuilder;
 	}
-	
-	public void run(String jarPath, CSVBuilder csvBuilder) {
-		// TODO implement
-		
-	}
-	
-	public static void main(String[] args) throws SecurityException, ClassNotFoundException {
-		String className = ExplorerMode.UNSAFE.getListOfClassNames().get(0);
-		java.lang.reflect.Method[] methods = Class.forName(className).getMethods();
-		
-		System.out.println("class: "+ExplorerMode.UNSAFE.getListOfClassNames().get(0)+"\n");
-		for (java.lang.reflect.Method method : methods) {
-			/*System.out.print(method.getReturnType().toString() + " " + method.getName() + "(");
-			boolean first = true;
-			for (Type type : method.getParameterTypes()) {
-				if(first){ first = false; }
-				else { System.out.print(", "); }
-				System.out.print(type.toString());
+
+	public void run() {
+		List<String> classes = new ArrayList<>();
+		classes.addAll(ExplorerMode.REFLECTION.getListOfClassNames());
+		classes.addAll(ExplorerMode.UNSAFE.getListOfClassNames());
+
+		for (String className : classes) {
+			this.targetClass = className.replace(".", "/");
+			try {
+				for (java.lang.reflect.Method method : Class.forName(className).getMethods()) {
+
+					this.targetMethodDeclaration = MethodNameFormatter.format(method.toString());
+
+					try {
+						this.findCallingMethodsInJar();
+
+						// TODO replace by write report with csvBuilder
+						System.out.println(this.callees.size() + " methods invoke " + this.targetClass + " "
+								+ this.targetMethod.getName() + " " + this.targetMethod.getDescriptor() + "\n");
+					} catch (Exception e) {
+						// TODO output to report_error
+						System.out.println("error to analyze method \"" + this.targetMethodDeclaration + "\"");
+					}
+					this.callees.clear();
+
+				}
+			} catch (SecurityException | ClassNotFoundException e) {
+				System.out.println("error to analyze \"" + className + "\"");
 			}
-			System.out.println(")");*/
-			System.out.println(method);
 		}
-		System.out.println("--------------------------");
+
 	}
 
-	/*public static void main(String[] args) {
-		try {
-			AsmRunner app = new AsmRunner(args[0], args[1], args[2]);
-
-			app.findCallingMethodsInJar();
-
-			for (Callee c : app.callees) {
-				System.out
-						.println(c.source + ":" + c.line + " " + c.className + " " + c.methodName + " " + c.methodDesc);
-			}
-
-			System.out.println("--\n" + app.callees.size() + " methods invoke " + app.targetClass + " "
-					+ app.targetMethod.getName() + " " + app.targetMethod.getDescriptor());
-		} catch (Exception x) {
-			x.printStackTrace();
-		}
-	}*/
-
+	// TODO write junit test
 }
