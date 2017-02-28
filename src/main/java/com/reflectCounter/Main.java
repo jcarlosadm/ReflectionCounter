@@ -11,7 +11,8 @@ import org.json.simple.parser.JSONParser;
 
 import com.reflectCounter.util.CSVBuilder;
 import com.reflectCounter.util.Folders;
-import com.reflectCounter.util.PropertiesManager;
+
+import br.com.commons.util.PropertiesManager;
 
 public class Main {
 	
