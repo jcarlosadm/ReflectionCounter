@@ -6,23 +6,24 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 
+import com.reflectCounter.gradle.builder.GradleBuilder;
+import com.reflectCounter.maven.builder.MavenBuilder;
+import com.reflectCounter.util.repositoryBuilder.RepoBuilder;
+
 public class Repository {
 
 	private String urlProject = "";
 	private String repoFolderName = "";
-	private boolean isMavenProject = false;
-	private boolean isGradleProject = false;
+	
+	private RepoBuilder repoBuilderInstance = null;
 
 	public Repository(String urlProject) {
 		this.urlProject = urlProject;
 		this.repoFolderName = this.getRepoFolderName(urlProject);
-
-		this.isMavenProject = this.checkIfIsMaven();
-		this.isGradleProject = this.checkIfIsGradle();
 	}
 
 	private boolean checkIfIsGradle() {
-		File file = new File(this.repoFolderName + File.separator + "gradle.build");
+		File file = new File(this.repoFolderName + File.separator + "build.gradle");
 
 		return (file.exists() && !file.isDirectory());
 	}
@@ -77,10 +78,21 @@ public class Repository {
 	}
 
 	public boolean isMavenProject() {
-		return isMavenProject;
+		return this.checkIfIsMaven();
 	}
 
 	public boolean isGradleProject() {
-		return isGradleProject;
+		return this.checkIfIsGradle();
+	}
+
+	public RepoBuilder getRepoBuilderInstance() {
+		if (this.repoBuilderInstance == null) {
+			if (this.checkIfIsGradle())
+				this.repoBuilderInstance = new GradleBuilder(this.repoFolderName);
+			else if(this.checkIfIsMaven())
+				this.repoBuilderInstance = new MavenBuilder(this.repoFolderName);
+		}
+		
+		return repoBuilderInstance;
 	}
 }
