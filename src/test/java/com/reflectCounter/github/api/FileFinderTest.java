@@ -3,6 +3,7 @@ package com.reflectCounter.github.api;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,6 +16,8 @@ public class FileFinderTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 	
+	// TODO remove Ignore if using github api
+	@Ignore
 	@Test
 	public void testFileFinder() throws Exception {
 		thrown.expect(Exception.class);
@@ -24,6 +27,8 @@ public class FileFinderTest {
 		FileFinder fileFinder = new FileFinder(searchTerms);
 	}
 
+	// TODO remove Ignore if using github api
+	@Ignore
 	@Test
 	public void testRun() throws Exception {
 		SearchTerms searchTerms = new SearchTerms();

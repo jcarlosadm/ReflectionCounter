@@ -3,6 +3,7 @@ package com.reflectCounter.github.api;
 import static org.junit.Assert.*;
 
 import org.json.simple.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.reflectCounter.github.api.GithubSearchApi;
@@ -12,6 +13,8 @@ public class GithubSearchApiTest {
 	private static final String WRONG_URL = "https://api.github.com/repos/danidddd-e/tesssdsros/commits";
 	private static final String URL = "https://api.github.com/search/repositories?q=language:java";
 
+	// TODO remove Ignore if using github api
+	@Ignore
 	@Test
 	public void testGetInstance() {
 		GithubSearchApi gApi1 = GithubSearchApi.getInstance(true);
@@ -22,6 +25,8 @@ public class GithubSearchApiTest {
 		assertEquals(gApi1, gApi2);
 	}
 
+	// TODO remove Ignore if using github api
+	@Ignore
 	@Test
 	public void testGetJsonObject() {
 		GithubSearchApi githubSearchApi = GithubSearchApi.getInstance(true);
