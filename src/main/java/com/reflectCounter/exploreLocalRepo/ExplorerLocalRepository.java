@@ -12,6 +12,7 @@ public class ExplorerLocalRepository {
 
 	private File repoFolder = null;
 
+	@SuppressWarnings("unused")
 	private OcurrencesCsv csvBuilder = null;
 
 	public ExplorerLocalRepository(File repoFolder, OcurrencesCsv csvBuilder) {
@@ -65,6 +66,7 @@ public class ExplorerLocalRepository {
 	 * @return true if get all methods without uncertain. false if otherwise
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unused")
 	private boolean searchMethods(String filepath, ExplorerMode mode) throws Exception {
 		// TODO implement (if using github api)
 		File file = new File(filepath);
