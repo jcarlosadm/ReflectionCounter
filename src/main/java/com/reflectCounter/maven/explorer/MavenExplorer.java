@@ -51,5 +51,13 @@ public class MavenExplorer {
 			return null;
 		}
 	}
+	
+	public String getVersion() {
+		try {
+			return this.getXmlInfo("version");
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 }
