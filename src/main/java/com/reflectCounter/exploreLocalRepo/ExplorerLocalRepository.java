@@ -6,15 +6,15 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.reflectCounter.util.CSVBuilder;
+import com.reflectCounter.util.OcurrencesCsv;
 
 public class ExplorerLocalRepository {
 
 	private File repoFolder = null;
 
-	private CSVBuilder csvBuilder = null;
+	private OcurrencesCsv csvBuilder = null;
 
-	public ExplorerLocalRepository(File repoFolder, CSVBuilder csvBuilder) {
+	public ExplorerLocalRepository(File repoFolder, OcurrencesCsv csvBuilder) {
 		this.repoFolder = repoFolder;
 		this.csvBuilder = csvBuilder;
 	}
@@ -66,9 +66,10 @@ public class ExplorerLocalRepository {
 	 * @throws Exception
 	 */
 	private boolean searchMethods(String filepath, ExplorerMode mode) throws Exception {
-		// TODO implement
+		// TODO implement (if using github api)
 		File file = new File(filepath);
-		List<String> listClassNames = mode.getListOfClassNames();
+		List<String> classes = mode.getListOfClassNames();
+		
 		
 		return false;
 	}
