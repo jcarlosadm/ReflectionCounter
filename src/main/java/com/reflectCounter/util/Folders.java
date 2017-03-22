@@ -8,6 +8,7 @@ public class Folders {
 	public static final String REPOS_FOLDER = "repos";
 	public static final String OUTPUTS_FOLDER = "outputs";
 	public static final String LOGS_FOLDER = OUTPUTS_FOLDER + File.separator + "logs";
+	public static final String JAR_FOLDER = "jars";
 
 	public static boolean makeFolders() {
 
@@ -16,6 +17,7 @@ public class Folders {
 		folders.add(new File(REPOS_FOLDER));
 		folders.add(new File(OUTPUTS_FOLDER));
 		folders.add(new File(LOGS_FOLDER));
+		folders.add(new File(JAR_FOLDER));
 
 		for (File folder : folders) {
 			if (!createFolder(folder)) {
