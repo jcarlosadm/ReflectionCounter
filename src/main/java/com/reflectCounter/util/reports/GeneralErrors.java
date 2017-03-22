@@ -2,6 +2,8 @@ package com.reflectCounter.util.reports;
 
 import java.io.File;
 
+import com.reflectCounter.util.Folders;
+
 public class GeneralErrors extends FileReport {
 
 	private static final String FILENAME = "general_errors.txt";
@@ -14,7 +16,7 @@ public class GeneralErrors extends FileReport {
 	
 	public synchronized static GeneralErrors getInstance() throws Exception {
 		if (instance == null)
-			instance = new GeneralErrors(new File(FILENAME));
+			instance = new GeneralErrors(new File(Folders.REPOS_FOLDER + File.separator + FILENAME));
 		return instance;
 	}
 	

@@ -17,8 +17,8 @@ import org.objectweb.asm.commons.EmptyVisitor;
 import org.objectweb.asm.commons.Method;
 
 import com.reflectCounter.exploreLocalRepo.ExplorerMode;
-import com.reflectCounter.util.ErrorReport;
-import com.reflectCounter.util.OcurrencesCsv;
+import com.reflectCounter.util.reports.MethodCounter;
+import com.reflectCounter.util.reports.MethodErrors;
 
 /**
  * AsmRunner See App class in
@@ -34,7 +34,7 @@ public class AsmRunner {
 	private ArrayList<Callee> callees = new ArrayList<Callee>();
 	private String targetMethodDeclaration;
 	private String jarPath;
-	private OcurrencesCsv csvBuilder;
+	private String projectName;
 
 	@SuppressWarnings("unused")
 	private static class Callee {
@@ -138,9 +138,8 @@ public class AsmRunner {
 		jarFile.close();
 	}
 
-	public AsmRunner(String jarPath, OcurrencesCsv csvBuilder) {
+	public AsmRunner(String jarPath, String projectName) {
 		this.jarPath = jarPath;
-		this.csvBuilder = csvBuilder;
 	}
 
 	public void run() {
@@ -152,22 +151,24 @@ public class AsmRunner {
 			this.targetClass = className.replace(".", "/");
 			try {
 				for (java.lang.reflect.Method method : Class.forName(className).getMethods()) {
-					
+
 					this.targetMethodDeclaration = MethodNameFormatter.format(method.toString());
 
 					try {
 						this.findCallingMethodsInJar();
 
-						this.csvBuilder.write(className, method.toString(), this.callees.size());
+						MethodCounter.getInstance().write(this.projectName, className, method.toString(),
+								this.callees.size());
 						System.out.println(this.callees.size() + " methods invoke " + this.targetClass + " "
 								+ this.targetMethod.getName() + " " + this.targetMethod.getDescriptor() + "\n");
 					} catch (Exception e) {
-						String errorM = "error to analyze method \"" + this.targetMethodDeclaration + "\"";
 						e.printStackTrace();
 						try {
-							ErrorReport.getInstance().write(errorM);
-						} catch (Exception e1) {}
-						System.out.println(errorM);
+							MethodErrors.getInstance().write(this.projectName, className, method.toString(),
+									e.getMessage());
+						} catch (Exception e1) {
+						}
+						System.out.println("error to analyze method \"" + this.targetMethodDeclaration + "\"");
 					}
 					this.callees.clear();
 				}

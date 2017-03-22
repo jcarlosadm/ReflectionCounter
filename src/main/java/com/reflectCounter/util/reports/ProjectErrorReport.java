@@ -2,6 +2,8 @@ package com.reflectCounter.util.reports;
 
 import java.io.File;
 
+import com.reflectCounter.util.Folders;
+
 /**
  * List of projects with errors
  *
@@ -22,7 +24,7 @@ public class ProjectErrorReport extends CsvReport {
 
 	public synchronized static ProjectErrorReport getInstance() throws Exception {
 		if (instance == null)
-			instance = new ProjectErrorReport(new File(FILENAME), SEPARATOR, HEADER);
+			instance = new ProjectErrorReport(new File(Folders.REPOS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
 
 		return instance;
 	}

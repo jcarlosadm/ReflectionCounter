@@ -2,6 +2,8 @@ package com.reflectCounter.util.reports;
 
 import java.io.File;
 
+import com.reflectCounter.util.Folders;
+
 public class MethodErrors extends CsvReport {
 
 	private static final String FILENAME = "method_errors.csv";
@@ -17,9 +19,9 @@ public class MethodErrors extends CsvReport {
 		super(file, separator, header);
 	}
 
-	public synchronized MethodErrors getInstance() throws Exception {
+	public synchronized static MethodErrors getInstance() throws Exception {
 		if (instance == null)
-			instance = new MethodErrors(new File(FILENAME), SEPARATOR, HEADER);
+			instance = new MethodErrors(new File(Folders.REPOS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
 		return instance;
 	}
 

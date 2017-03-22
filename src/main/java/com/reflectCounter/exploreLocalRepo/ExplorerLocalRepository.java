@@ -6,18 +6,12 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.reflectCounter.util.OcurrencesCsv;
-
 public class ExplorerLocalRepository {
 
 	private File repoFolder = null;
 
-	@SuppressWarnings("unused")
-	private OcurrencesCsv csvBuilder = null;
-
-	public ExplorerLocalRepository(File repoFolder, OcurrencesCsv csvBuilder) {
+	public ExplorerLocalRepository(File repoFolder) {
 		this.repoFolder = repoFolder;
-		this.csvBuilder = csvBuilder;
 	}
 
 	/**

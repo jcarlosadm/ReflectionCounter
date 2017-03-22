@@ -2,6 +2,8 @@ package com.reflectCounter.util.reports;
 
 import java.io.File;
 
+import com.reflectCounter.util.Folders;
+
 public class MethodCounter extends CsvReport {
 
 	private static final String FILENAME = "method_counter.csv";
@@ -19,7 +21,7 @@ public class MethodCounter extends CsvReport {
 
 	public static synchronized MethodCounter getInstance() throws Exception {
 		if (instance == null)
-			instance = new MethodCounter(new File(FILENAME), SEPARATOR, HEADER);
+			instance = new MethodCounter(new File(Folders.REPOS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
 		return instance;
 	}
 
