@@ -1,4 +1,4 @@
-package com.reflectCounter;
+package com.reflectCounter.project;
 
 import java.io.File;
 
@@ -22,61 +22,19 @@ public class ProjectRunner {
 
 		System.out.println(System.lineSeparator());
 
-		System.out.println("cloning " + this.repository.getUrlProject());
-		if (!this.repository.cloneRepo()) {
-			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on clone");
-			System.out.println("error to clone repository. exiting");
-			this.deleteProjectFolder();
+		if (!this.cloneProject() || !this.isGradleOrMaven())
 			return;
-		}
-
-		// TODO remove if uses github api
-		if (!this.repository.isMavenProject() && !this.repository.isGradleProject()) {
-			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(),
-					"this is not a gradle or maven repository. exiting");
-			System.out.println("this is not a gradle or maven repository. exiting");
-			this.deleteProjectFolder();
-			return;
-		}
 
 		// TODO check if jar already exists
 		
 		// search artifacts if is maven project
-		if (this.repository.isMavenProject()) {
-			MavenProject mavenProject = new MavenProject(this.getPomFile());
-			System.out.println("this is a maven project. searching public artifacts");
-			String jarPath = mavenProject.downloadJar();
-			// TODO move jar to jar folder (in project+user folder)
-			if (jarPath != null && !jarPath.isEmpty()) {
-				this.runAsmTool(jarPath);
-				this.deleteProjectFolder();
-				return;
-			} else
-				System.out.println("error to download jar");
-		}
-
-		// build
-
-		RepoBuilder repoBuilder = this.repository.getRepoBuilderInstance();
-		System.out.println("building project " + this.repository.getUrlProject());
-		if (repoBuilder.build() == false) {
-			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on build");
-			System.out.println("error to build this project");
-			this.deleteProjectFolder();
+		if (!this.downloadMavenArtifact())
 			return;
-		}
 
-		File jar = repoBuilder.getJar();
-		if (jar == null || !jar.exists() || jar.isDirectory()) {
-			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on build");
-			System.out.println("jar don't exists");
-			this.deleteProjectFolder();
+		// run asm
+
+		if(!this.runAsmTool())
 			return;
-		}
-
-		this.runAsmTool(jar.getAbsolutePath());
-
-		this.deleteProjectFolder();
 
 		// // using github api
 		//
@@ -146,4 +104,72 @@ public class ProjectRunner {
 	// url = url.substring(0, url.lastIndexOf("/"));
 	// return url.substring(url.lastIndexOf("/") + 1);
 	// }
+	
+	private boolean cloneProject() throws Exception {
+		System.out.println("cloning " + this.repository.getUrlProject());
+		if (!this.repository.cloneRepo()) {
+			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on clone");
+			System.out.println("error to clone repository. exiting");
+			this.deleteProjectFolder();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean isGradleOrMaven() throws Exception {
+		if (!this.repository.isMavenProject() && !this.repository.isGradleProject()) {
+			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(),
+					"this is not a gradle or maven repository. exiting");
+			System.out.println("this is not a gradle or maven repository. exiting");
+			this.deleteProjectFolder();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean downloadMavenArtifact() throws Exception{
+		if (this.repository.isMavenProject()) {
+			MavenProject mavenProject = new MavenProject(this.getPomFile());
+			System.out.println("this is a maven project. searching public artifacts");
+			String jarPath = mavenProject.downloadJar();
+			// TODO move jar to jar folder (in project+user folder)
+			if (jarPath != null && !jarPath.isEmpty()) {
+				this.runAsmTool(jarPath);
+				this.deleteProjectFolder();
+				return false;
+			} else
+				System.out.println("error to download jar");
+		}
+		
+		return true;
+	}
+	
+	private boolean runAsmTool() throws Exception {
+		RepoBuilder repoBuilder = this.repository.getRepoBuilderInstance();
+		System.out.println("building project " + this.repository.getUrlProject());
+		if (repoBuilder.build() == false) {
+			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on build");
+			System.out.println("error to build this project");
+			this.deleteProjectFolder();
+			return false;
+		}
+
+		File jar = repoBuilder.getJar();
+		if (jar == null || !jar.exists() || jar.isDirectory()) {
+			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on build");
+			System.out.println("jar don't exists");
+			this.deleteProjectFolder();
+			return false;
+		}
+		
+		// TODO move jar to jar folder (in project+user folder)
+
+		this.runAsmTool(jar.getAbsolutePath());
+
+		this.deleteProjectFolder();
+		
+		return true;
+	}
 }

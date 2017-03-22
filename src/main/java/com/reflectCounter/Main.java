@@ -2,6 +2,7 @@ package com.reflectCounter;
 
 import java.util.List;
 
+import com.reflectCounter.project.ProjectRunner;
 import com.reflectCounter.util.Folders;
 import com.reflectCounter.util.UrlsGet;
 import com.reflectCounter.util.reports.CloseReports;
@@ -28,6 +29,7 @@ public class Main {
 
 			for (String url : urls) {
 				try {
+					// TODO run in a new thread
 					(new ProjectRunner(url)).run();
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
