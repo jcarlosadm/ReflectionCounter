@@ -8,3 +8,5 @@
 /outputs/
 general.test.config
 *.json
+
+class_diagrams.*
