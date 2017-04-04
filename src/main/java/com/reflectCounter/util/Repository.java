@@ -13,30 +13,34 @@ import com.reflectCounter.util.repositoryBuilder.RepoBuilder;
 public class Repository {
 
 	private String urlProject = "";
+	private String repoFolderPath = "";
 	private String repoFolderName = "";
+	private String owner = "";
 	
 	private RepoBuilder repoBuilderInstance = null;
 
 	public Repository(String urlProject) {
 		this.urlProject = urlProject;
-		this.repoFolderName = this.getRepoFolderName(urlProject);
+		this.repoFolderPath = this.buildRepoFolderPath(urlProject);
+		this.buildRepoFolderName();
+		this.buildOwnerName();
 	}
 
 	private boolean checkIfIsGradle() {
-		File file = new File(this.repoFolderName + File.separator + "build.gradle");
+		File file = new File(this.repoFolderPath + File.separator + "build.gradle");
 
 		return (file.exists() && !file.isDirectory());
 	}
 
 	private boolean checkIfIsMaven() {
-		File file = new File(this.repoFolderName + File.separator + "pom.xml");
+		File file = new File(this.repoFolderPath + File.separator + "pom.xml");
 
 		return (file.exists() && !file.isDirectory());
 	}
 
 	public boolean cloneRepo() {
 
-		File repofolder = new File(this.repoFolderName);
+		File repofolder = new File(this.repoFolderPath);
 		if (!repofolder.exists() && repofolder.mkdirs()) {
 			try {
 				Git.cloneRepository().setURI(urlProject).setDirectory(repofolder).call();
@@ -54,9 +58,9 @@ public class Repository {
 		return true;
 	}
 
-	private String getRepoFolderName(String urlProject) {
-		if (this.repoFolderName != null && !this.repoFolderName.isEmpty()) {
-			return this.repoFolderName;
+	private String buildRepoFolderPath(String urlProject) {
+		if (this.repoFolderPath != null && !this.repoFolderPath.isEmpty()) {
+			return this.repoFolderPath;
 		}
 
 		String lastRepoFolder;
@@ -68,13 +72,30 @@ public class Repository {
 
 		return (Folders.REPOS_FOLDER + File.separator + lastRepoFolder);
 	}
+	
+	private void buildRepoFolderName() {
+		this.repoFolderName = this.repoFolderPath.substring(this.repoFolderPath.lastIndexOf("/") + 1);
+	}
+	
+	private void buildOwnerName() {
+		String url = this.urlProject.substring(0, this.urlProject.lastIndexOf("/"));
+		this.owner = url.substring(url.lastIndexOf("/")+1);
+	}
+	
+	public String getOwnerName() {
+		return this.owner;
+	}
+	
+	public String getRepoFolderName() {
+		return this.repoFolderName;
+	}
 
 	public String getUrlProject() {
 		return this.urlProject;
 	}
 
-	public String getRepoFolderName() {
-		return this.repoFolderName;
+	public String getRepoFolderPath() {
+		return this.repoFolderPath;
 	}
 
 	public boolean isMavenProject() {
@@ -88,9 +109,9 @@ public class Repository {
 	public RepoBuilder getRepoBuilderInstance() {
 		if (this.repoBuilderInstance == null) {
 			if (this.checkIfIsGradle())
-				this.repoBuilderInstance = new GradleBuilder(this.repoFolderName);
+				this.repoBuilderInstance = new GradleBuilder(this.repoFolderPath);
 			else if(this.checkIfIsMaven())
-				this.repoBuilderInstance = new MavenBuilder(this.repoFolderName);
+				this.repoBuilderInstance = new MavenBuilder(this.repoFolderPath);
 		}
 		
 		return repoBuilderInstance;

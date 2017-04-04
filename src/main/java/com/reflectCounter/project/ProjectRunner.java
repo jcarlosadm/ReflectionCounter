@@ -25,15 +25,27 @@ public class ProjectRunner {
 		if (!this.cloneProject() || !this.isGradleOrMaven())
 			return;
 
-		// TODO check if jar already exists
+		File jarFile = null;
 		
-		// search artifacts if is maven project
-		if (!this.downloadMavenArtifact())
+		// check if jar already exists
+		jarFile = this.searchJarLocally();
+		
+		// download maven artifacts (if is maven project)
+		if (jarFile == null)
+			jarFile = this.downloadMavenArtifact();
+		
+		// build project
+		if (jarFile == null)
+			jarFile = this.buildProject();
+		
+		// error to get jar
+		if (jarFile == null) {
+			this.deleteProjectFolder();
 			return;
+		}
 
 		// run asm
-
-		if(!this.runAsmTool())
+		if(!this.runAsmTool(jarFile))
 			return;
 
 		// // using github api
@@ -65,8 +77,14 @@ public class ProjectRunner {
 		//
 	}
 
+	private File searchJarLocally() {
+		JarChecker jarChecker = new JarChecker();
+		jarChecker.buildPath(this.repository.getOwnerName(), this.repository.getRepoFolderName());
+		return jarChecker.getJar();
+	}
+
 	private void deleteProjectFolder() throws Exception {
-		FileUtils.deleteDirectory(new File(this.repository.getRepoFolderName()));
+		FileUtils.deleteDirectory(new File(this.repository.getRepoFolderPath()));
 	}
 
 	private void runAsmTool(String jarPath) {
@@ -77,7 +95,7 @@ public class ProjectRunner {
 	}
 
 	private File getPomFile() {
-		return new File(this.repository.getRepoFolderName() + File.separator + "pom.xml");
+		return new File(this.repository.getRepoFolderPath() + File.separator + "pom.xml");
 	}
 
 	// private SearchTerms fillBasicSearchTerms() {
@@ -129,43 +147,50 @@ public class ProjectRunner {
 		return true;
 	}
 	
-	private boolean downloadMavenArtifact() throws Exception{
+	private File downloadMavenArtifact() throws Exception{
 		if (this.repository.isMavenProject()) {
 			MavenProject mavenProject = new MavenProject(this.getPomFile());
 			System.out.println("this is a maven project. searching public artifacts");
-			String jarPath = mavenProject.downloadJar();
-			// TODO move jar to jar folder (in project+user folder)
-			if (jarPath != null && !jarPath.isEmpty()) {
-				this.runAsmTool(jarPath);
-				this.deleteProjectFolder();
-				return false;
-			} else
+			File jarFile = new File(mavenProject.downloadJar());
+			
+			// TODO move jar to jar folder and set jarFile to newPath
+			JarChecker jarChecker = new JarChecker();
+			jarChecker.buildPath(this.repository.getOwnerName(), this.repository.getRepoFolderName());
+			jarChecker.moveJarToDefaultFolder(jarFile);
+			
+			if (jarFile == null || !jarFile.exists() || jarFile.isDirectory()) {
 				System.out.println("error to download jar");
+				return null;
+			}
+			
+			return jarFile;
 		}
 		
-		return true;
+		return null;
 	}
 	
-	private boolean runAsmTool() throws Exception {
+	private File buildProject() throws Exception {
 		RepoBuilder repoBuilder = this.repository.getRepoBuilderInstance();
 		System.out.println("building project " + this.repository.getUrlProject());
 		if (repoBuilder.build() == false) {
 			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on build");
 			System.out.println("error to build this project");
-			this.deleteProjectFolder();
-			return false;
+			return null;
 		}
 
 		File jar = repoBuilder.getJar();
 		if (jar == null || !jar.exists() || jar.isDirectory()) {
 			ProjectErrorReport.getInstance().write(this.repository.getUrlProject(), "error on build");
 			System.out.println("jar don't exists");
-			this.deleteProjectFolder();
-			return false;
+			return null;
 		}
 		
-		// TODO move jar to jar folder (in project+user folder)
-
+		// TODO move jar to jar folder and set jar to new path
+		
+		return jar;
+	}
+	
+	private boolean runAsmTool(File jar) throws Exception {
 		this.runAsmTool(jar.getAbsolutePath());
 
 		this.deleteProjectFolder();
