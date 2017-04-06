@@ -14,60 +14,30 @@ public class ExplorerLocalRepository {
 		this.repoFolder = repoFolder;
 	}
 
+	// TODO make tests
 	/**
-	 * explore list of files, to search methods of classes of reflection or Unsafe
+	 * explore list of files, to search methods of classes of reflection and Unsafe
 	 * @param listOfFiles
-	 * @param mode explorer mode (i.e., reflection classes or Unsafe class)
-	 * @return list of uncertain files (use other search algorithm)
 	 * @throws Exception
 	 */
-	public List<String> explore(List<String> listOfFiles, ExplorerMode mode) throws Exception {
-		if (listOfFiles == null || listOfFiles.isEmpty()) {
-			return this.exploreAllFiles(mode);
-		}
-		
-		List<String> suspiciousFiles = new ArrayList<>();
+	public void explore(List<String> listOfFiles) throws Exception {
+		if (listOfFiles == null || listOfFiles.isEmpty())
+			this.fillList(listOfFiles);
 		
 		for (String filepath : listOfFiles) {
-			if (!this.searchMethods(filepath, mode))
-				suspiciousFiles.add(filepath);
+			FileSearcher fileSearcher = new FileSearcher(filepath);
+			fileSearcher.run();
 		}
 		
-		return suspiciousFiles;
 	}
 
-	/**
-	 * explore all files of this repository
-	 * @param mode explorer mode (i.e., reflection classes or Unsafe class)
-	 * @return list of uncertain files (use other search algorithm)
-	 * @throws Exception
-	 */
-	private List<String> exploreAllFiles(ExplorerMode mode) throws Exception {
+	private void fillList(List<String> listOfFiles) throws Exception {
 		String[] extensions = {"java"};
-		List<String> suspiciousFiles = new ArrayList<>();
-		for (File file : FileUtils.listFiles(this.repoFolder, extensions, true)) {
-			if (!this.searchMethods(file.getAbsolutePath(), mode))
-				suspiciousFiles.add(file.getAbsolutePath());
-		}
 		
-		return suspiciousFiles;
+		if (listOfFiles == null)
+			listOfFiles = new ArrayList<>();
+		
+		for (File file : FileUtils.listFiles(this.repoFolder, extensions, true))
+			listOfFiles.add(file.getAbsolutePath());
 	}
-
-	/**
-	 * search methods on designated file
-	 * @param filepath file to search
-	 * @param mode explorer mode (i.e., reflection classes or Unsafe class)
-	 * @return true if get all methods without uncertain. false if otherwise
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unused")
-	private boolean searchMethods(String filepath, ExplorerMode mode) throws Exception {
-		// TODO implement (if using github api)
-		File file = new File(filepath);
-		List<String> classes = mode.getListOfClassNames();
-		
-		
-		return false;
-	}
-
 }

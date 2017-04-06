@@ -32,6 +32,7 @@ public class JarChecker {
 		return (files.length > 0);
 	}
 	
+	// TODO make test
 	/**
 	 * get the first file in jar folder
 	 * @return null if jar folder or jar not exists, and the jar in otherwise
@@ -43,6 +44,7 @@ public class JarChecker {
 		return this.folderPath.listFiles()[0];
 	}
 	
+	// TODO make test
 	public File moveJarToDefaultFolder(File jar) throws Exception {
 		if (this.folderPath == null)
 			throw new NullPointerException();
