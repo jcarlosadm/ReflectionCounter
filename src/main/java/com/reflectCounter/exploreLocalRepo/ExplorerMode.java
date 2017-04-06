@@ -21,6 +21,11 @@ public enum ExplorerMode {
 			list.add("java.lang.reflect.Proxy");
 			return list;
 		}
+
+		@Override
+		public String basename() {
+			return "java.lang.reflect";
+		}
 	},
 	UNSAFE {
 		@Override
@@ -29,8 +34,14 @@ public enum ExplorerMode {
 			list.add("sun.misc.Unsafe");
 			return list;
 		}
+
+		@Override
+		public String basename() {
+			return "sun.misc.Unsafe";
+		}
 	};
 	
 	public abstract List<String> getListOfClassNames();
+	public abstract String basename();
 	
 }
