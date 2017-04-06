@@ -24,7 +24,7 @@ public class JarChecker {
 		return true;
 	}
 	
-	private boolean jarExists() {
+	private boolean jarExists() throws NullPointerException {
 		if (this.folderExists() == false)
 			return false;
 		
@@ -36,7 +36,7 @@ public class JarChecker {
 	 * get the first file in jar folder
 	 * @return null if jar folder or jar not exists, and the jar in otherwise
 	 */
-	public File getJar() {
+	public File getJar() throws NullPointerException {
 		if (this.jarExists() == false)
 			return null;
 		

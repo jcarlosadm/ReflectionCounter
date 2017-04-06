@@ -31,15 +31,15 @@ public class ProjectRunner {
 		jarFile = this.searchJarLocally();
 		
 		// download maven artifacts (if is maven project)
-		if (jarFile == null)
+		if (!this.validJar(jarFile))
 			jarFile = this.downloadMavenArtifact();
 		
 		// build project
-		if (jarFile == null)
+		if (!this.validJar(jarFile))
 			jarFile = this.buildProject();
 		
 		// error to get jar
-		if (jarFile == null) {
+		if (!this.validJar(jarFile)) {
 			this.deleteProjectFolder();
 			return;
 		}
@@ -77,10 +77,18 @@ public class ProjectRunner {
 		//
 	}
 
+	private boolean validJar(File jarFile) {
+		return (jarFile != null && jarFile.exists() && !jarFile.isDirectory());
+	}
+
 	private File searchJarLocally() {
 		JarChecker jarChecker = new JarChecker();
 		jarChecker.buildPath(this.repository.getOwnerName(), this.repository.getRepoFolderName());
-		return jarChecker.getJar();
+		try {
+			return jarChecker.getJar();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	private void deleteProjectFolder() throws Exception {
@@ -154,9 +162,7 @@ public class ProjectRunner {
 			File jarFile = new File(mavenProject.downloadJar());
 			
 			// TODO move jar to jar folder and set jarFile to newPath
-			JarChecker jarChecker = new JarChecker();
-			jarChecker.buildPath(this.repository.getOwnerName(), this.repository.getRepoFolderName());
-			jarChecker.moveJarToDefaultFolder(jarFile);
+			jarFile = moveJarFile(jarFile);
 			
 			if (jarFile == null || !jarFile.exists() || jarFile.isDirectory()) {
 				System.out.println("error to download jar");
@@ -168,7 +174,7 @@ public class ProjectRunner {
 		
 		return null;
 	}
-	
+
 	private File buildProject() throws Exception {
 		RepoBuilder repoBuilder = this.repository.getRepoBuilderInstance();
 		System.out.println("building project " + this.repository.getUrlProject());
@@ -186,8 +192,19 @@ public class ProjectRunner {
 		}
 		
 		// TODO move jar to jar folder and set jar to new path
+		jar = this.moveJarFile(jar);
 		
 		return jar;
+	}
+	
+	private File moveJarFile(File jarFile) throws Exception {
+		JarChecker jarChecker = new JarChecker();
+		jarChecker.buildPath(this.repository.getOwnerName(), this.repository.getRepoFolderName());
+		try {
+			return jarChecker.moveJarToDefaultFolder(jarFile);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	private boolean runAsmTool(File jar) throws Exception {
