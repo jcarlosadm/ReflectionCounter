@@ -21,7 +21,7 @@ public class FileSearcher {
 
 	public void run() throws Exception {
 		this.fillFileContent();
-		
+
 		for (ExplorerMode explorerMode : ExplorerMode.values()) {
 			List<String> classNames = explorerMode.getListOfClassNames();
 
@@ -43,12 +43,12 @@ public class FileSearcher {
 
 	private void fillFileContent() throws Exception {
 		BufferedReader bReader = new BufferedReader(new FileReader(new File(this.filepath)));
-		
-		String line= "";
-		while((line = bReader.readLine()) != null){
-			this.fileContent  += line;
+
+		String line = "";
+		while ((line = bReader.readLine()) != null) {
+			this.fileContent += line;
 		}
-		
+
 		bReader.close();
 	}
 
@@ -63,7 +63,46 @@ public class FileSearcher {
 
 	private void findMethodUsage(String className, Method method) {
 		// TODO Auto-generated method stub
+		if (className == null || className.isEmpty() || !this.fileContent.contains("import " + className)
+				|| method == null)
+			return;
+
+		String methodName = method.getName();
+		int nMethodArgs = method.getParameterTypes().length;
+
+		if (!this.fileContent.contains(methodName))
+			return;
+
+		int methodFreq = this.countMethodFreq(methodName, nMethodArgs);
+
+		if (methodFreq > 0)
+			this.explorerCounter.addCount(className, methodName, methodFreq);
+
+	}
+
+	private int countMethodFreq(String methodName, int nMethodArgs) {
+		// TODO Auto-generated method stub
+		// build regular expression
 		
+		return 0;
+	}
+
+	public static void main(String[] args) {
+		String string = "java.lang.reflect.Modifier";
+
+		try {
+			Class<?> obj = Class.forName(string);
+			Method[] methods = obj.getMethods();
+			for (Method method : methods) {
+				// public final native void java.lang.Object.wait(long) throws
+				// java.lang.InterruptedException
+				System.out.println(method.getName());
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

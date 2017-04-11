@@ -7,14 +7,20 @@ public class ExplorerCounter {
 
 	private Map<String, Map<String, Integer>> methodCountByClass = new HashMap<>();
 
-	public void incrementCount(String className, String methodName) {
+	public void addCount(String className, String methodName, int value) {
+		if (value < 1)
+			return;
+		
 		if (this.methodCountByClass.containsKey(className) == false) {
 			Map<String, Integer> methodCount = new HashMap<>();
-			methodCount.put(methodName, 1);
+			methodCount.put(methodName, value);
 			this.methodCountByClass.put(className, methodCount);
 		} else {
 			Map<String, Integer> methodCount = this.methodCountByClass.get(className);
-			methodCount.put(methodName, methodCount.get(methodName) + 1);
+			if (methodCount.containsKey(methodName))
+				methodCount.put(methodName, methodCount.get(methodName) + value);
+			else
+				methodCount.put(methodName, value);
 		}
 	}
 
