@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.reflectCounter.util.RegexMethodFinderBuilder;
 import com.reflectCounter.util.reports.GeneralErrors;
 
 public class FileSearcher {
@@ -45,9 +48,8 @@ public class FileSearcher {
 		BufferedReader bReader = new BufferedReader(new FileReader(new File(this.filepath)));
 
 		String line = "";
-		while ((line = bReader.readLine()) != null) {
-			this.fileContent += line;
-		}
+		while ((line = bReader.readLine()) != null)
+			this.fileContent += line + System.lineSeparator();
 
 		bReader.close();
 	}
@@ -56,9 +58,8 @@ public class FileSearcher {
 		Class<?> classObj = Class.forName(className);
 		Method[] methods = classObj.getDeclaredMethods();
 
-		for (Method method : methods) {
+		for (Method method : methods)
 			this.findMethodUsage(className, method);
-		}
 	}
 
 	private void findMethodUsage(String className, Method method) {
@@ -81,28 +82,13 @@ public class FileSearcher {
 	}
 
 	private int countMethodFreq(String methodName, int nMethodArgs) {
-		// TODO Auto-generated method stub
-		// build regular expression
-		
-		return 0;
+		Pattern pattern = Pattern.compile(RegexMethodFinderBuilder.build(methodName, nMethodArgs));
+		Matcher m = pattern.matcher(this.fileContent);
+
+		int counter = 0;
+		while (m.find())
+			++counter;
+
+		return counter;
 	}
-
-	public static void main(String[] args) {
-		String string = "java.lang.reflect.Modifier";
-
-		try {
-			Class<?> obj = Class.forName(string);
-			Method[] methods = obj.getMethods();
-			for (Method method : methods) {
-				// public final native void java.lang.Object.wait(long) throws
-				// java.lang.InterruptedException
-				System.out.println(method.getName());
-			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 }
