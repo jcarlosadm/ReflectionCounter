@@ -21,7 +21,7 @@ public class MethodCounter extends CsvReport {
 
 	public static synchronized MethodCounter getInstance() throws Exception {
 		if (instance == null)
-			instance = new MethodCounter(new File(Folders.REPOS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
+			instance = new MethodCounter(new File(Folders.OUTPUTS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
 		return instance;
 	}
 

@@ -148,7 +148,12 @@ public class ProjectRunner {
 		if (this.repository.isMavenProject()) {
 			MavenProject mavenProject = new MavenProject(this.getPomFile());
 			System.out.println("this is a maven project. searching public artifacts");
-			File jarFile = new File(mavenProject.downloadJar());
+			File jarFile = null;
+			try {
+				jarFile = new File(mavenProject.downloadJar());
+			} catch (Exception e) {
+				jarFile = null;
+			}
 
 			jarFile = moveJarFile(jarFile);
 
@@ -185,6 +190,9 @@ public class ProjectRunner {
 	}
 
 	private File moveJarFile(File jarFile) throws Exception {
+		if (jarFile == null)
+			return null;
+
 		JarChecker jarChecker = new JarChecker();
 		jarChecker.buildPath(this.repository.getOwnerName(), this.repository.getRepoFolderName());
 		try {

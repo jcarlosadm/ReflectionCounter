@@ -16,7 +16,7 @@ public class GeneralErrors extends FileReport {
 	
 	public synchronized static GeneralErrors getInstance() throws Exception {
 		if (instance == null)
-			instance = new GeneralErrors(new File(Folders.REPOS_FOLDER + File.separator + FILENAME));
+			instance = new GeneralErrors(new File(Folders.OUTPUTS_FOLDER + File.separator + FILENAME));
 		return instance;
 	}
 	

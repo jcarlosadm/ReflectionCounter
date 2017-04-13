@@ -21,7 +21,7 @@ public class MethodErrors extends CsvReport {
 
 	public synchronized static MethodErrors getInstance() throws Exception {
 		if (instance == null)
-			instance = new MethodErrors(new File(Folders.REPOS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
+			instance = new MethodErrors(new File(Folders.OUTPUTS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
 		return instance;
 	}
 

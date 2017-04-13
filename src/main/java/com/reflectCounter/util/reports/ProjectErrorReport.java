@@ -24,7 +24,7 @@ public class ProjectErrorReport extends CsvReport {
 
 	public synchronized static ProjectErrorReport getInstance() throws Exception {
 		if (instance == null)
-			instance = new ProjectErrorReport(new File(Folders.REPOS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
+			instance = new ProjectErrorReport(new File(Folders.OUTPUTS_FOLDER + File.separator + FILENAME), SEPARATOR, HEADER);
 
 		return instance;
 	}

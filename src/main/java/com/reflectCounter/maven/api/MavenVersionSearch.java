@@ -21,7 +21,7 @@ public class MavenVersionSearch {
 		
 		if (responseObj == null)
 			return null;
-			
+		
 		Long numFound = (Long) responseObj.get("numFound");
 		if (numFound == null || numFound.longValue() <= 0)
 			return null;
