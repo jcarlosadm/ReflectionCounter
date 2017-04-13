@@ -9,9 +9,9 @@ public class RegexMethodFinderBuilderTest {
 	private static final String EXPECTED_OUTPUT_01 = "\\.[\\s]*[\\r\\n]*[\\s]*add[\\s]*[\\r\\n]*[\\s]*"
 			+ "\\([\\s]*[\\r\\n]*[\\s]*[\\s]*[\\r\\n]*[\\s]*\\)";
 	private static final String EXPECTED_OUTPUT_02 = "\\.[\\s]*[\\r\\n]*[\\s]*[\\s]*[\\r\\n]*[\\s]*\\"
-			+ "([\\s]*[\\r\\n]*[\\s]*[a-zA-Z_][a-zA-Z0-9_]*[\\s]*[\\r\\n]*[\\s]*[,]"
-			+ "[\\s]*[\\r\\n]*[\\s]*[a-zA-Z_][a-zA-Z0-9_]*[\\s]*[\\r\\n]*[\\s]*[,]"
-			+ "[\\s]*[\\r\\n]*[\\s]*[a-zA-Z_][a-zA-Z0-9_]*[\\s]*[\\r\\n]*[\\s]*\\)";
+			+ "([\\s]*[\\r\\n]*[\\s]*(.*?)[\\s]*[\\r\\n]*[\\s]*[,]"
+			+ "[\\s]*[\\r\\n]*[\\s]*(.*?)[\\s]*[\\r\\n]*[\\s]*[,]"
+			+ "[\\s]*[\\r\\n]*[\\s]*(.*?)[\\s]*[\\r\\n]*[\\s]*\\)";
 	private static final String EXPECTED_OUTPUT_03 = "\\.[\\s]*[\\r\\n]*[\\s]*[\\s]*[\\r\\n]*[\\s]*"
 			+ "\\([\\s]*[\\r\\n]*[\\s]*[\\s]*[\\r\\n]*[\\s]*\\)";
 	private static final String EXPECTED_OUTPUT_04 = "\\.[\\s]*[\\r\\n]*[\\s]*add[\\s]*[\\r\\n]*[\\s]*"

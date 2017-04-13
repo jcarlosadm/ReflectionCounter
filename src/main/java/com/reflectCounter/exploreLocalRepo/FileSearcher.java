@@ -63,7 +63,6 @@ public class FileSearcher {
 	}
 
 	private void findMethodUsage(String className, Method method) {
-		// TODO Auto-generated method stub
 		if (className == null || className.isEmpty() || !this.fileContent.contains("import " + className)
 				|| method == null)
 			return;
@@ -81,7 +80,6 @@ public class FileSearcher {
 
 	}
 
-	// TODO make tests
 	private int countMethodFreq(String methodName, int nMethodArgs) {
 		Pattern pattern = Pattern.compile(RegexMethodFinderBuilder.build(methodName, nMethodArgs));
 		Matcher m = pattern.matcher(this.fileContent);

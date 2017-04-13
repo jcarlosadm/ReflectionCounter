@@ -7,7 +7,7 @@ public final class RegexMethodFinderBuilder {
 	private static final String CLOSE_PAR = "\\)";
 	private static final String OPEN_PAR = "\\(";
 	private static final String SPACE_LINE_BREAK = "[\\s]*[\\r\\n]*[\\s]*";
-	private static final String ID = "[a-zA-Z_][a-zA-Z0-9_]*";
+	private static final String ARG = "(.*?)";
 	
 	private RegexMethodFinderBuilder() {
 	}
@@ -19,7 +19,7 @@ public final class RegexMethodFinderBuilder {
 		for (int i = 0; i < nArgs; ++i) {
 			if (i != 0)
 				mArgs.append(SPACE_LINE_BREAK);
-			mArgs.append(ID);
+			mArgs.append(ARG);
 			if (i < nArgs - 1)
 				mArgs.append(SPACE_LINE_BREAK + COMMA);
 		}
