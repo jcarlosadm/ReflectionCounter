@@ -81,6 +81,7 @@ public class FileSearcher {
 
 	}
 
+	// TODO make tests
 	private int countMethodFreq(String methodName, int nMethodArgs) {
 		Pattern pattern = Pattern.compile(RegexMethodFinderBuilder.build(methodName, nMethodArgs));
 		Matcher m = pattern.matcher(this.fileContent);
