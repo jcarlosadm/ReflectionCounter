@@ -13,6 +13,8 @@ public final class RegexMethodFinderBuilder {
 	}
 	
 	public static String build(String methodName, int nArgs) {
+		if(methodName == null) methodName = "";
+		
 		StringBuilder mArgs = new StringBuilder();
 		for (int i = 0; i < nArgs; ++i) {
 			if (i != 0)
