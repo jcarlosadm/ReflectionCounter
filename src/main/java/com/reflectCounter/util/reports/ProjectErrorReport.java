@@ -30,7 +30,7 @@ public class ProjectErrorReport extends CsvReport {
 	}
 	
 	public synchronized void write(String projectName, String error) throws Exception {
-		this.write(projectName, error);
+		super.write(projectName, error);
 	}
 
 }

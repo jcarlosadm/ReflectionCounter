@@ -27,7 +27,7 @@ public class MethodErrors extends CsvReport {
 
 	public synchronized void write(String projectName, String className, String methodName, String error)
 			throws Exception {
-		this.write(projectName, className, methodName, error);
+		super.write(projectName, className, methodName, error);
 	}
 
 }

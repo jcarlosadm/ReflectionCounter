@@ -27,6 +27,6 @@ public class MethodCounter extends CsvReport {
 
 	public synchronized void write(String projectName, String currentClass, String method, int count) throws Exception {
 		if (count > 0)
-			this.write(projectName, currentClass, method, "" + count);
+			super.write(projectName, currentClass, method, "" + count);
 	}
 }

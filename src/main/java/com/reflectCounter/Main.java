@@ -19,7 +19,6 @@ public class Main {
 			}
 
 			InitializeReports.initialize();
-			CloseReports.close();
 
 			List<String> urls = UrlsGet.get();
 			if (urls == null) {
@@ -36,6 +35,8 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
+			
+			CloseReports.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
