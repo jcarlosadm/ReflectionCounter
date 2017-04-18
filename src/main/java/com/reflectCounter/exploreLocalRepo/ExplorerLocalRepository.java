@@ -34,7 +34,8 @@ public class ExplorerLocalRepository {
 			this.fillList(listOfFiles);
 
 		for (String filepath : listOfFiles) {
-			FileSearcher fileSearcher = new FileSearcher(filepath, explorerCounter);
+			FileSearcher fileSearcher = new FileSearcher(this.repoFolder.getAbsolutePath() + File.separator + filepath,
+					explorerCounter);
 			fileSearcher.run();
 		}
 
