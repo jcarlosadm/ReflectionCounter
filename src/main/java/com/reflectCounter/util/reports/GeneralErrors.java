@@ -6,7 +6,7 @@ import com.reflectCounter.util.Folders;
 
 public class GeneralErrors extends FileReport {
 
-	private static final String FILENAME = "general_errors.txt";
+	private static final String FILEPATH = Folders.OUTPUTS_FOLDER + File.separator + "general_errors.txt";
 	
 	private static GeneralErrors instance = null;
 	
@@ -16,7 +16,7 @@ public class GeneralErrors extends FileReport {
 	
 	public synchronized static GeneralErrors getInstance() throws Exception {
 		if (instance == null)
-			instance = new GeneralErrors(new File(Folders.OUTPUTS_FOLDER + File.separator + FILENAME));
+			instance = new GeneralErrors(new File(FILEPATH));
 		return instance;
 	}
 	
