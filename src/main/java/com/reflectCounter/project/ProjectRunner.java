@@ -54,7 +54,7 @@ public class ProjectRunner {
 			}
 		}
 
-		// TODO explorer local repo
+		// explorer local repo
 		List<String> files = this.searchFilesOnGithub();
 		ExplorerLocalRepository explorerLocalRepository = new ExplorerLocalRepository(
 				new File(this.repository.getRepoFolderPath()), this.repository.getUrlProject());
