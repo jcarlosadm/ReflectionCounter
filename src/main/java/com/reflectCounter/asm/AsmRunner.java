@@ -139,6 +139,7 @@ public class AsmRunner {
 	}
 
 	public AsmRunner(String jarPath, String projectName) {
+		this.projectName = projectName;
 		this.jarPath = jarPath;
 	}
 
