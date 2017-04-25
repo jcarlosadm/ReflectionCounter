@@ -6,7 +6,6 @@ import com.reflectCounter.project.ProjectRunner;
 import com.reflectCounter.util.Folders;
 import com.reflectCounter.util.UrlsGet;
 import com.reflectCounter.util.reports.CloseReports;
-import com.reflectCounter.util.reports.InitializeReports;
 
 public class Main {
 
@@ -17,8 +16,6 @@ public class Main {
 				System.out.println("error to make folder");
 				return;
 			}
-
-			InitializeReports.initialize();
 
 			List<String> urls = UrlsGet.get();
 			if (urls == null) {
