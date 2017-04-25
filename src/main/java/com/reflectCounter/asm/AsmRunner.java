@@ -169,6 +169,7 @@ public class AsmRunner {
 									e.getMessage());
 						} catch (Exception e1) {
 						}
+						
 						System.out.println("error to analyze method \"" + this.targetMethodDeclaration + "\"");
 					}
 					this.callees.clear();
