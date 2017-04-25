@@ -15,7 +15,7 @@ public class ExplorerLocalRepositoryTest {
 	@Test
 	public void testExplore() throws Exception {
 
-		ExplorerLocalRepository explorer = new ExplorerLocalRepository(
+		/*ExplorerLocalRepository explorer = new ExplorerLocalRepository(
 				new File("repos/groovy-html-renderer"),
 				"project test");
 		List<String> list = new ArrayList<>();
@@ -25,7 +25,7 @@ public class ExplorerLocalRepositoryTest {
 			System.out.println(string);
 		}
 		
-		CloseReports.close();
+		CloseReports.close();*/
 	}
 
 }
