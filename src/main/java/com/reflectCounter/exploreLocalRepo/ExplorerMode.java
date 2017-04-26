@@ -39,6 +39,32 @@ public enum ExplorerMode {
 		public String basename() {
 			return "sun.misc.Unsafe";
 		}
+	},
+	CLASS {
+		@Override
+		public List<String> getListOfClassNames() {
+			List<String> list = new ArrayList<>();
+			list.add("java.lang.Class");
+			return list;
+		}
+
+		@Override
+		public String basename() {
+			return "java.lang.Class";
+		}
+	},
+	CLASS_LOADER {
+		@Override
+		public List<String> getListOfClassNames() {
+			List<String> list = new ArrayList<>();
+			list.add("java.lang.ClassLoader");
+			return list;
+		}
+
+		@Override
+		public String basename() {
+			return "java.lang.ClassLoader";
+		}
 	};
 	
 	public abstract List<String> getListOfClassNames();
