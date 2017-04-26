@@ -78,8 +78,13 @@ public class ProjectRunner {
 				tempFiles = null;
 			}
 
-			if (tempFiles != null && !tempFiles.isEmpty())
+			if (tempFiles != null && !tempFiles.isEmpty()){
+				for (int i = 0; i < tempFiles.size(); i++) {
+					tempFiles.set(i, this.repository.getRepoFolderPath() + File.separator + tempFiles.get(i));
+				}
+				
 				files.addAll(tempFiles);
+			}
 		}
 
 		return files;

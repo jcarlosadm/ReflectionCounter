@@ -64,17 +64,17 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.5</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/asm/asm -->
+		<!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
 		<dependency>
-			<groupId>asm</groupId>
+			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm</artifactId>
-			<version>3.1</version>
+			<version>5.2</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/asm/asm-commons -->
+		<!-- https://mvnrepository.com/artifact/org.ow2.asm/asm-commons -->
 		<dependency>
-			<groupId>asm</groupId>
+			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm-commons</artifactId>
-			<version>3.1</version>
+			<version>5.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.maven.shared/maven-invoker -->
 		<dependency>

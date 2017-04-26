@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.objectweb.asm.ClassAdapter;
+//import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodAdapter;
+//import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.commons.EmptyVisitor;
+import org.objectweb.asm.Opcodes;
+//import org.objectweb.asm.commons.EmptyVisitor;
 import org.objectweb.asm.commons.Method;
 
 import com.reflectCounter.exploreLocalRepo.ExplorerMode;
@@ -53,15 +55,22 @@ public class AsmRunner {
 		}
 	}
 
-	private class AppMethodVisitor extends MethodAdapter {
+	private class AppMethodVisitor extends MethodVisitor {
 
 		boolean callsTarget;
 		int line;
 
 		public AppMethodVisitor() {
-			super(new EmptyVisitor());
+			super(Opcodes.ASM5);
 		}
 
+		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+			if (owner.equals(targetClass) && name.equals(targetMethod.getName())
+					&& desc.equals(targetMethod.getDescriptor())) {
+				callsTarget = true;
+			}
+		}
+		
 		public void visitMethodInsn(int opcode, String owner, String name, String desc) {
 			if (owner.equals(targetClass) && name.equals(targetMethod.getName())
 					&& desc.equals(targetMethod.getDescriptor())) {
@@ -83,7 +92,7 @@ public class AsmRunner {
 		}
 	}
 
-	private class AppClassVisitor extends ClassAdapter {
+	private class AppClassVisitor extends ClassVisitor {
 
 		private AppMethodVisitor mv = new AppMethodVisitor();
 
@@ -93,7 +102,7 @@ public class AsmRunner {
 		public String methodDesc;
 
 		public AppClassVisitor() {
-			super(new EmptyVisitor());
+			super(Opcodes.ASM5);
 		}
 
 		public void visit(int version, int access, String name, String signature, String superName,
@@ -169,7 +178,7 @@ public class AsmRunner {
 									e.getMessage());
 						} catch (Exception e1) {
 						}
-						
+
 						System.out.println("error to analyze method \"" + this.targetMethodDeclaration + "\"");
 					}
 					this.callees.clear();
@@ -182,4 +191,14 @@ public class AsmRunner {
 	}
 
 	// TODO write junit test
+
+	public static void main(String[] args) throws Exception {
+		AsmRunner asmRunner = new AsmRunner(
+				"/home/jcarlosvf/Documents/git/marcioResearchs/ReflectionCounter/jars/AlexDigital/RewiMod/RewiMod-1.0.jar",
+				"test");
+		asmRunner.run();
+		MethodCounter.getInstance().close();
+		MethodErrors.getInstance().close();
+		
+	}
 }

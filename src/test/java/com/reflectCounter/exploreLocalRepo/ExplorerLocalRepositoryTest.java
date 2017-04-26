@@ -1,14 +1,14 @@
 package com.reflectCounter.exploreLocalRepo;
 
-import static org.junit.Assert.*;
+/*import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;*/
 
 import org.junit.Test;
 
-import com.reflectCounter.util.reports.CloseReports;
+//import com.reflectCounter.util.reports.CloseReports;
 
 public class ExplorerLocalRepositoryTest {
 

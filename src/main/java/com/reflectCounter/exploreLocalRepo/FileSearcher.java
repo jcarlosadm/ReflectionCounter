@@ -76,7 +76,7 @@ public class FileSearcher {
 		int methodFreq = this.countMethodFreq(methodName, nMethodArgs);
 
 		if (methodFreq > 0)
-			this.explorerCounter.addCount(className, methodName, methodFreq);
+			this.explorerCounter.addCount(className, method.toString(), methodFreq);
 
 	}
 
